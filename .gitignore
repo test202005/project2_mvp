@@ -1,2 +1,15 @@
 /demo.docx
 /~$demo.docx
+
+# 不提交 PDF 文档
+*.pdf
+
+# 如果你只是不想提交 demo.pdf
+# demo.pdf
+
+# Python 常规忽略
+__pycache__/
+*.pyc
+
+# 本地环境
+.env

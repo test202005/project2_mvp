@@ -12,31 +12,36 @@ def read_local_pdf(file_path: str) -> str:
     """读取本地 PDF 文件的前几页内容"""
     try:
         from pypdf import PdfReader
-        
+
         # 获取文件名
         file_name = os.path.basename(file_path)
-        
+
         # 打开 PDF 文件
         reader = PdfReader(file_path)
-        
+
         # 读取前 3 页
-        excerpts = []
         max_pages = min(3, len(reader.pages))
-        
+        lines = [f"文件: {file_name}"]
+
         for i in range(max_pages):
             page = reader.pages[i]
             text = page.extract_text()
-            # 清理文本并限制长度
+
+            # 处理空文本情况
+            if not text or not text.strip():
+                lines.append(f"p{i+1}: （本页无文本内容）")
+                continue
+
+            # 清理文本，取300-500字
             clean_text = text.strip().replace('\n', ' ')
-            if len(clean_text) > 200:
-                clean_text = clean_text[:200] + "..."
-            excerpts.append(f"摘录{i+1}: {clean_text}")
-        
-        # 构建返回内容
-        result = f"文件: {file_name}\n"
-        result += "\n".join(excerpts)
-        
-        return result
+            if len(clean_text) > 500:
+                clean_text = clean_text[:500]
+            elif len(clean_text) < 300 and i < max_pages - 1:
+                # 如果不足300字且不是最后一页，可以继续读取
+                pass
+            lines.append(f"p{i+1}: {clean_text}")
+
+        return "\n".join(lines)
     except Exception as e:
         return f"错误: 读取 PDF 文件失败 - {str(e)}"
 
@@ -47,13 +52,13 @@ if not API_KEY:
     exit(1)
 
 # 模型调用（使用智谱 ZhipuAI SDK）
-def call_model(prompt, tools=None, tool_results=None):
+def call_model(prompt, system_prompt, tools=None, tool_results=None):
     from zhipuai import ZhipuAI
-    
+
     client = ZhipuAI(api_key=API_KEY)
-    
+
     messages = [
-        {"role": "system", "content": "你是一个 helpful assistant，会根据需要调用工具来获取信息。当用户提供 PDF 文件路径时，你应该调用 read_local_pdf 工具来读取文件内容，然后基于内容生成课程大纲。"},
+        {"role": "system", "content": system_prompt},
         {"role": "user", "content": prompt}
     ]
     
@@ -84,6 +89,13 @@ def call_model(prompt, tools=None, tool_results=None):
 
 # 主函数
 def main():
+    # 模式选择
+    mode = input("选择模式：1=课程大纲 2=项目说明（说明版）：").strip()
+    if mode == "2":
+        import prompt_project_brief as P
+    else:
+        import prompt_course_outline as P
+
     # 定义工具
     tools = [
         {
@@ -118,13 +130,16 @@ def main():
     ]
     
     # 用户提示
-    prompt = "请分析以下 PDF 文件内容，并基于内容生成一个详细的课程大纲（使用 Markdown 格式）。每条大纲要点末尾请注明来源，格式为：（来源：文件名 摘录：...）。\n\nPDF 文件路径：{pdf_path}".format(
-        pdf_path=input("请输入 PDF 文件路径: ")
-    )
-    
+    pdf_path = input("请输入 PDF 文件路径: ").strip()
+    first_prompt = P.FIRST_PROMPT_TEMPLATE.format(pdf_path=pdf_path)
+
+    # 防呆检查
+    assert "{pdf_path}" not in first_prompt, "PDF 路径未正确替换"
+    print(f"\n[First Prompt]\n{first_prompt}\n")
+
     # 第一次模型调用
     print("=== 开始执行 ===")
-    first_response = call_model(prompt, tools)
+    first_response = call_model(first_prompt, P.SYSTEM_PROMPT, tools)
     print("1. 模型第一次回复:")
     print("content:", getattr(first_response, "content", None))
 
@@ -164,12 +179,9 @@ def main():
             "name": tool_name,
             "content": tool_result
         }
-        second_prompt = (
-            "请仅基于上面 tool 返回的“文件名+摘录”生成课程大纲（Markdown）。\n"
-            "要求：3~8章，每章3~7要点；每条要点末尾必须带（来源：文件名 摘录：...）。\n"
-            "不要再次要求读取PDF，也不要再次调用任何工具。"
-        )
-        final_response = call_model(second_prompt, None, tool_results)
+        second_prompt = P.SECOND_PROMPT
+
+        final_response = call_model(second_prompt, P.SYSTEM_PROMPT, None, tool_results)
 
         print("4. 模型最终输出:")
         print(final_response.content)
