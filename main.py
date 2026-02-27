@@ -82,6 +82,18 @@ def run_mode_rag():
             pages["p3"] += line[3:].strip()
     chunks = build_chunks(pages, max_len=220, overlap=40)
     print(f"[INFO] chunks built: {len(chunks)}")
+
+    # 调试：检查关键词是否在 chunks 中
+    keywords = ["工具调用", "函数调用", "tool", "Function Calling"]
+    stats = {k: [] for k in keywords}
+    for ch in chunks:
+        for kw in keywords:
+            if kw in ch.text:
+                stats[kw].append(ch.chunk_id)
+
+    print("[DEBUG] 关键词在 chunks 中的分布:")
+    for kw, ids in stats.items():
+        print(f"  '{kw}': 命中 {len(ids)} 个, 前3个 chunk_id: {ids[:3]}")
     while True:
         q = input("\n请输入问题（exit 退出）：").strip()
         if q.lower() in ("exit", "quit", "q"):
@@ -93,7 +105,16 @@ def run_mode_rag():
         for ch, score in top:
             preview = ch.text[:120] + ("..." if len(ch.text) > 120 else "")
             print(f"  - {ch.chunk_id} (score={score}) {preview}")
-        print("[RETRIEVAL] Top chunks IDs:", ", ".join([c.chunk_id for c, _ in top]))
+        top_chunk_ids = [c.chunk_id for c, _ in top]
+        print("[RETRIEVAL] Top chunks IDs:", ", ".join(top_chunk_ids) if top_chunk_ids else "(empty)")
+
+        # 拒答可解释化：no-hit 时直接返回固定模板，不走模型
+        if not top:
+            print(f"[DECISION] REFUSE reason=no_hit query='{q}' top_chunks_ids={top_chunk_ids}")
+            print("\n[ANSWER]")
+            print("抱歉，文档中未提供相关信息。")
+            continue
+
         context_lines = []
         for ch, score in top:
             context_lines.append(f"[{ch.chunk_id}] ({ch.page}) {ch.text}")
@@ -107,6 +128,7 @@ def run_mode_rag():
             "检索片段：\n"
             + "\n".join(context_lines)
         )
+        print(f"[DECISION] ANSWER reason=sufficient_evidence query='{q}' top_chunks_ids={top_chunk_ids}")
         response = client.chat.completions.create(
             model="glm-4.5",
             messages=[

@@ -54,9 +54,10 @@ def build_chunks(pages: Dict[str, str], max_len: int = 220, overlap: int = 40) -
                 break
     return chunks
 
-def retrieve_topk(query: str, chunks: List[Chunk], top_k: int = 3) -> List[Tuple[Chunk, int]]:
+def retrieve_topk(query: str, chunks: List[Chunk], top_k: int = 3, min_score: int = 2) -> List[Tuple[Chunk, int]]:
     """
     朴素检索：按 token 重叠数打分（先把可观测跑通）。
+    min_score: 最低分数阈值，若 top1 分数 < min_score 则返回空列表（用于拒答）
     """
     q_tokens = set(_tokenize(query))
     scored: List[Tuple[Chunk, int]] = []
@@ -65,6 +66,10 @@ def retrieve_topk(query: str, chunks: List[Chunk], top_k: int = 3) -> List[Tuple
         score = len(q_tokens & c_tokens)
         scored.append((ch, score))
     scored.sort(key=lambda x: x[1], reverse=True)
-    # 调试阶段：不过滤 0 分，看所有 Top-k
+
+    # min_score 阈值判断：若 top1 分数 < min_score，则返回空列表
+    if not scored or scored[0][1] < min_score:
+        return []
+
     top = scored[:top_k]
     return top

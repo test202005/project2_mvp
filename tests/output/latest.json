@@ -1,0 +1,228 @@
+{
+  "timestamp": "2026-02-27T19:07:39.705886",
+  "summary": {
+    "total": 20,
+    "overall_pass": 17,
+    "overall_acc": 0.85,
+    "answer_total": 10,
+    "answer_pass": 10,
+    "answer_acc": 1.0,
+    "refuse_total": 10,
+    "refuse_pass": 7,
+    "refuse_acc": 0.7
+  },
+  "results": [
+    {
+      "id": 1,
+      "question": "什么是工程可接受？给出定义",
+      "expected": "ANSWER",
+      "actual": "ANSWER",
+      "passed": true,
+      "top_chunks_ids": [
+        "p3-c01",
+        "p1-c00",
+        "p1-c01"
+      ]
+    },
+    {
+      "id": 2,
+      "question": "项目的核心用户是谁？",
+      "expected": "ANSWER",
+      "actual": "ANSWER",
+      "passed": true,
+      "top_chunks_ids": [
+        "p1-c00",
+        "p2-c00",
+        "p1-c02"
+      ]
+    },
+    {
+      "id": 3,
+      "question": "RAG Copilot 的项目目标是什么？",
+      "expected": "ANSWER",
+      "actual": "ANSWER",
+      "passed": true,
+      "top_chunks_ids": [
+        "p1-c02",
+        "p1-c00",
+        "p2-c00"
+      ]
+    },
+    {
+      "id": 4,
+      "question": "最小验收标准MVP包含哪些内容？",
+      "expected": "ANSWER",
+      "actual": "ANSWER",
+      "passed": true,
+      "top_chunks_ids": [
+        "p3-c00",
+        "p3-c01",
+        "p1-c02"
+      ]
+    },
+    {
+      "id": 5,
+      "question": "为什么不能直接用大模型对话？",
+      "expected": "ANSWER",
+      "actual": "ANSWER",
+      "passed": true,
+      "top_chunks_ids": [
+        "p1-c01",
+        "p1-c00",
+        "p2-c00"
+      ]
+    },
+    {
+      "id": 6,
+      "question": "课程设计人员日常工作中会遇到哪些问题？",
+      "expected": "ANSWER",
+      "actual": "ANSWER",
+      "passed": true,
+      "top_chunks_ids": [
+        "p1-c00",
+        "p1-c01",
+        "p2-c00"
+      ]
+    },
+    {
+      "id": 7,
+      "question": "RAG的边界是如何定义的？",
+      "expected": "ANSWER",
+      "actual": "ANSWER",
+      "passed": true,
+      "top_chunks_ids": [
+        "p2-c01",
+        "p3-c00",
+        "p1-c00"
+      ]
+    },
+    {
+      "id": 8,
+      "question": "这个项目适合什么类型的课程？",
+      "expected": "ANSWER",
+      "actual": "ANSWER",
+      "passed": true,
+      "top_chunks_ids": [
+        "p3-c01",
+        "p1-c00",
+        "p3-c00"
+      ]
+    },
+    {
+      "id": 9,
+      "question": "数据资源有哪些特点？",
+      "expected": "ANSWER",
+      "actual": "ANSWER",
+      "passed": true,
+      "top_chunks_ids": [
+        "p2-c01",
+        "p2-c00",
+        "p1-c00"
+      ]
+    },
+    {
+      "id": 10,
+      "question": "MVP阶段重点关注什么？",
+      "expected": "ANSWER",
+      "actual": "ANSWER",
+      "passed": true,
+      "top_chunks_ids": [
+        "p3-c00",
+        "p2-c01",
+        "p3-c01"
+      ]
+    },
+    {
+      "id": 11,
+      "question": "什么是函数调用？",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "passed": true,
+      "top_chunks_ids": []
+    },
+    {
+      "id": 12,
+      "question": "工具调用是如何工作的？",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "passed": true,
+      "top_chunks_ids": []
+    },
+    {
+      "id": 13,
+      "question": "Function Calling 的原理是什么？",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "passed": true,
+      "top_chunks_ids": []
+    },
+    {
+      "id": 14,
+      "question": "如何使用Python实现工具调用？",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "passed": true,
+      "top_chunks_ids": []
+    },
+    {
+      "id": 15,
+      "question": "大模型的temperature参数如何设置？",
+      "expected": "REFUSE",
+      "actual": "ANSWER",
+      "passed": false,
+      "top_chunks_ids": [
+        "p1-c01",
+        "p2-c00",
+        "p2-c01"
+      ]
+    },
+    {
+      "id": 16,
+      "question": "什么是向量数据库？",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "passed": true,
+      "top_chunks_ids": []
+    },
+    {
+      "id": 17,
+      "question": "LangChain框架怎么用？",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "passed": true,
+      "top_chunks_ids": []
+    },
+    {
+      "id": 18,
+      "question": "RAG系统中如何使用embedding模型？",
+      "expected": "REFUSE",
+      "actual": "ANSWER",
+      "passed": false,
+      "top_chunks_ids": [
+        "p2-c00",
+        "p1-c01",
+        "p2-c01"
+      ]
+    },
+    {
+      "id": 19,
+      "question": "什么是Prompt Engineering？",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "passed": true,
+      "top_chunks_ids": []
+    },
+    {
+      "id": 20,
+      "question": "如何使用Transformer模型？",
+      "expected": "REFUSE",
+      "actual": "ANSWER",
+      "passed": false,
+      "top_chunks_ids": [
+        "p1-c01",
+        "p2-c00",
+        "p2-c01"
+      ]
+    }
+  ]
+}

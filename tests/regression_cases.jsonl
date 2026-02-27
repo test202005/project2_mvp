@@ -1,0 +1,20 @@
+{"id": 1, "pdf_path": "demo.pdf", "question": "什么是工程可接受？给出定义", "expected": "ANSWER"}
+{"id": 2, "pdf_path": "demo.pdf", "question": "项目的核心用户是谁？", "expected": "ANSWER"}
+{"id": 3, "pdf_path": "demo.pdf", "question": "RAG Copilot 的项目目标是什么？", "expected": "ANSWER"}
+{"id": 4, "pdf_path": "demo.pdf", "question": "最小验收标准MVP包含哪些内容？", "expected": "ANSWER"}
+{"id": 5, "pdf_path": "demo.pdf", "question": "为什么不能直接用大模型对话？", "expected": "ANSWER"}
+{"id": 6, "pdf_path": "demo.pdf", "question": "课程设计人员日常工作中会遇到哪些问题？", "expected": "ANSWER"}
+{"id": 7, "pdf_path": "demo.pdf", "question": "RAG的边界是如何定义的？", "expected": "ANSWER"}
+{"id": 8, "pdf_path": "demo.pdf", "question": "这个项目适合什么类型的课程？", "expected": "ANSWER"}
+{"id": 9, "pdf_path": "demo.pdf", "question": "数据资源有哪些特点？", "expected": "ANSWER"}
+{"id": 10, "pdf_path": "demo.pdf", "question": "MVP阶段重点关注什么？", "expected": "ANSWER"}
+{"id": 11, "pdf_path": "demo.pdf", "question": "什么是函数调用？", "expected": "REFUSE"}
+{"id": 12, "pdf_path": "demo.pdf", "question": "工具调用是如何工作的？", "expected": "REFUSE"}
+{"id": 13, "pdf_path": "demo.pdf", "question": "Function Calling 的原理是什么？", "expected": "REFUSE"}
+{"id": 14, "pdf_path": "demo.pdf", "question": "如何使用Python实现工具调用？", "expected": "REFUSE"}
+{"id": 15, "pdf_path": "demo.pdf", "question": "大模型的temperature参数如何设置？", "expected": "REFUSE"}
+{"id": 16, "pdf_path": "demo.pdf", "question": "什么是向量数据库？", "expected": "REFUSE"}
+{"id": 17, "pdf_path": "demo.pdf", "question": "LangChain框架怎么用？", "expected": "REFUSE"}
+{"id": 18, "pdf_path": "demo.pdf", "question": "RAG系统中如何使用embedding模型？", "expected": "REFUSE"}
+{"id": 19, "pdf_path": "demo.pdf", "question": "什么是Prompt Engineering？", "expected": "REFUSE"}
+{"id": 20, "pdf_path": "demo.pdf", "question": "如何使用Transformer模型？", "expected": "REFUSE"}
