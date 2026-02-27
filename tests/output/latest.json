@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-02-27T19:07:39.705886",
+  "timestamp": "2026-02-27T20:37:56.211973",
   "summary": {
     "total": 20,
-    "overall_pass": 17,
-    "overall_acc": 0.85,
+    "overall_pass": 20,
+    "overall_acc": 1.0,
     "answer_total": 10,
     "answer_pass": 10,
     "answer_acc": 1.0,
     "refuse_total": 10,
-    "refuse_pass": 7,
-    "refuse_acc": 0.7
+    "refuse_pass": 10,
+    "refuse_acc": 1.0
   },
   "results": [
     {
@@ -168,8 +168,8 @@
       "id": 15,
       "question": "大模型的temperature参数如何设置？",
       "expected": "REFUSE",
-      "actual": "ANSWER",
-      "passed": false,
+      "actual": "REFUSE",
+      "passed": true,
       "top_chunks_ids": [
         "p1-c01",
         "p2-c00",
@@ -196,8 +196,8 @@
       "id": 18,
       "question": "RAG系统中如何使用embedding模型？",
       "expected": "REFUSE",
-      "actual": "ANSWER",
-      "passed": false,
+      "actual": "REFUSE",
+      "passed": true,
       "top_chunks_ids": [
         "p2-c00",
         "p1-c01",
@@ -216,8 +216,8 @@
       "id": 20,
       "question": "如何使用Transformer模型？",
       "expected": "REFUSE",
-      "actual": "ANSWER",
-      "passed": false,
+      "actual": "REFUSE",
+      "passed": true,
       "top_chunks_ids": [
         "p1-c01",
         "p2-c00",

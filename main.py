@@ -31,14 +31,31 @@ def read_local_pdf(file_path: str) -> str:
     except Exception as e:
         return f"错误: 读取 PDF 文件失败 - {str(e)}"
 
-API_KEY = os.getenv('API_KEY')
-if not API_KEY:
-    print("错误: 请设置环境变量 API_KEY")
-    exit(1)
+def get_api_key():
+    """获取 API_KEY，延迟加载以便测试"""
+    API_KEY = os.getenv('API_KEY')
+    if not API_KEY:
+        print("错误: 请设置环境变量 API_KEY")
+        exit(1)
+    return API_KEY
+
+def is_howto_question(q: str) -> bool:
+    """判断问题是否包含方法型关键词（排除定义型问题）"""
+    # 定义型问题应该被排除
+    if any(kw in q for kw in ["什么是", "什么叫", "是什么", "如何定义", "怎样定义", "怎么定义"]):
+        return False
+    howto_keywords = ["如何", "怎么", "怎样", "实现", "设置", "使用"]
+    return any(kw in q for kw in howto_keywords)
+
+def has_howto_evidence(chunks_text: str) -> bool:
+    """判断检索内容是否包含方法型证据词（更具体的实现细节）"""
+    # 只保留最具体的方法指示词，避免误判
+    evidence_keywords = ["步骤", "参数", "示例", "代码", "例如", "如下", "可以通过", "方式"]
+    return any(kw in chunks_text for kw in evidence_keywords)
 
 def call_model(prompt, system_prompt, tools=None, tool_results=None):
     from zhipuai import ZhipuAI
-    client = ZhipuAI(api_key=API_KEY)
+    client = ZhipuAI(api_key=get_api_key())
     messages = [
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": prompt}
@@ -67,7 +84,7 @@ def call_model(prompt, system_prompt, tools=None, tool_results=None):
 def run_mode_rag():
     from zhipuai import ZhipuAI
     from retriever_keyword import build_chunks, retrieve_topk
-    client = ZhipuAI(api_key=API_KEY)
+    client = ZhipuAI(api_key=get_api_key())
     pdf_path = input("请输入 PDF 文件路径: ").strip()
     print(f"[INFO] 正在读取 PDF: {pdf_path}")
     pdf_result = read_local_pdf(pdf_path)
@@ -108,9 +125,19 @@ def run_mode_rag():
         top_chunk_ids = [c.chunk_id for c, _ in top]
         print("[RETRIEVAL] Top chunks IDs:", ", ".join(top_chunk_ids) if top_chunk_ids else "(empty)")
 
+        # 拼接收录文本用于方法型问题判断
+        top_chunks_text = " ".join(ch.text for ch, _ in top)
+
         # 拒答可解释化：no-hit 时直接返回固定模板，不走模型
         if not top:
             print(f"[DECISION] REFUSE reason=no_hit query='{q}' top_chunks_ids={top_chunk_ids}")
+            print("\n[ANSWER]")
+            print("抱歉，文档中未提供相关信息。")
+            continue
+
+        # 方法型问题门槛：方法型问题但无方法型证据时直接拒答
+        if is_howto_question(q) and not has_howto_evidence(top_chunks_text):
+            print(f"[DECISION] REFUSE reason=evidence_insufficient query='{q}' top_chunks_ids={top_chunk_ids}")
             print("\n[ANSWER]")
             print("抱歉，文档中未提供相关信息。")
             continue

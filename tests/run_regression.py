@@ -10,13 +10,14 @@ from datetime import datetime
 # 添加父目录到路径
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from main import read_local_pdf
+from main import read_local_pdf, is_howto_question, has_howto_evidence
 from retriever_keyword import build_chunks, retrieve_topk
 
-API_KEY = os.getenv('API_KEY')
-if not API_KEY:
-    print("错误: 请设置环境变量 API_KEY")
-    sys.exit(1)
+# 回归测试不需要调用模型，API_KEY 检查跳过
+# API_KEY = os.getenv('API_KEY')
+# if not API_KEY:
+#     print("错误: 请设置环境变量 API_KEY")
+#     sys.exit(1)
 
 
 def ask(pdf_path: str, question: str) -> dict:
@@ -51,9 +52,16 @@ def ask(pdf_path: str, question: str) -> dict:
     # 捕获输出日志
     log_buffer = io.StringIO()
 
+    # 拼接收录文本用于方法型问题判断
+    top_chunks_text = " ".join(ch.text for ch, _ in top)
+
     with redirect_stdout(log_buffer):
         if not top:
             print(f"[DECISION] REFUSE reason=no_hit query='{question}' top_chunks_ids={top_chunk_ids}")
+            decision = "REFUSE"
+        # 方法型问题门槛：方法型问题但无方法型证据时直接拒答
+        elif is_howto_question(question) and not has_howto_evidence(top_chunks_text):
+            print(f"[DECISION] REFUSE reason=evidence_insufficient query='{question}' top_chunks_ids={top_chunk_ids}")
             decision = "REFUSE"
         else:
             print(f"[DECISION] ANSWER reason=sufficient_evidence query='{question}' top_chunks_ids={top_chunk_ids}")
@@ -102,7 +110,7 @@ def run_regression():
         }
         results.append(result_item)
 
-        status = "✓" if passed else "✗"
+        status = "PASS" if passed else "FAIL"
         print(f"  {status} Expected: {expected}, Actual: {actual}\n")
 
     # 统计准确率
