@@ -1,227 +1,213 @@
 {
-  "timestamp": "2026-02-27T20:37:56.211973",
+  "timestamp": "2026-03-01T00:50:46.537245",
   "summary": {
-    "total": 20,
-    "overall_pass": 20,
-    "overall_acc": 1.0,
-    "answer_total": 10,
-    "answer_pass": 10,
-    "answer_acc": 1.0,
-    "refuse_total": 10,
-    "refuse_pass": 10,
-    "refuse_acc": 1.0
+    "total": 10,
+    "overall_pass": 7,
+    "overall_acc": 0.7,
+    "answer_total": 8,
+    "answer_pass": 7,
+    "answer_acc": 0.875,
+    "refuse_total": 2,
+    "refuse_pass": 0,
+    "refuse_acc": 0.0,
+    "scope_leak_count": 1
   },
   "results": [
     {
-      "id": 1,
-      "question": "什么是工程可接受？给出定义",
+      "id": 101,
+      "question": "XREDIT_A1_UNIQUE 是什么？",
       "expected": "ANSWER",
       "actual": "ANSWER",
       "passed": true,
+      "scope_passed": true,
+      "scope_leak": false,
+      "expected_scope": "A",
+      "doc_scope": "A",
       "top_chunks_ids": [
-        "p3-c01",
-        "p1-c00",
-        "p1-c01"
+        "A-p1-c00",
+        "B-p1-c00",
+        "A-p1-c01"
+      ],
+      "used_chunk_ids": [
+        "A-p1-c00",
+        "A-p1-c01"
       ]
     },
     {
-      "id": 2,
-      "question": "项目的核心用户是谁？",
+      "id": 102,
+      "question": "XREDIT_B1_UNIQUE 是什么？",
       "expected": "ANSWER",
       "actual": "ANSWER",
       "passed": true,
+      "scope_passed": true,
+      "scope_leak": false,
+      "expected_scope": "B",
+      "doc_scope": "B",
       "top_chunks_ids": [
-        "p1-c00",
-        "p2-c00",
-        "p1-c02"
+        "B-p1-c00",
+        "A-p1-c00",
+        "A-p1-c01"
+      ],
+      "used_chunk_ids": [
+        "B-p1-c00"
       ]
     },
     {
-      "id": 3,
-      "question": "RAG Copilot 的项目目标是什么？",
+      "id": 103,
+      "question": "top_k 推荐是多少？",
       "expected": "ANSWER",
       "actual": "ANSWER",
       "passed": true,
+      "scope_passed": true,
+      "scope_leak": false,
+      "expected_scope": "A",
+      "doc_scope": "A",
       "top_chunks_ids": [
-        "p1-c02",
-        "p1-c00",
-        "p2-c00"
+        "A-p1-c00",
+        "B-p1-c00",
+        "A-p1-c01"
+      ],
+      "used_chunk_ids": [
+        "A-p1-c00",
+        "A-p1-c01"
       ]
     },
     {
-      "id": 4,
-      "question": "最小验收标准MVP包含哪些内容？",
+      "id": 104,
+      "question": "A 版本 top_k 是多少？",
       "expected": "ANSWER",
       "actual": "ANSWER",
       "passed": true,
+      "scope_passed": true,
+      "scope_leak": false,
+      "expected_scope": "A",
+      "doc_scope": "A",
       "top_chunks_ids": [
-        "p3-c00",
-        "p3-c01",
-        "p1-c02"
+        "A-p1-c00",
+        "B-p1-c00",
+        "A-p1-c01"
+      ],
+      "used_chunk_ids": [
+        "A-p1-c00",
+        "A-p1-c01"
       ]
     },
     {
-      "id": 5,
-      "question": "为什么不能直接用大模型对话？",
+      "id": 105,
+      "question": "B 版本 top_k 是多少？",
+      "expected": "ANSWER",
+      "actual": "ANSWER",
+      "passed": false,
+      "scope_passed": false,
+      "scope_leak": true,
+      "expected_scope": "B",
+      "doc_scope": "A",
+      "top_chunks_ids": [
+        "A-p1-c00",
+        "B-p1-c00",
+        "A-p1-c01"
+      ],
+      "used_chunk_ids": [
+        "A-p1-c00",
+        "A-p1-c01"
+      ]
+    },
+    {
+      "id": 106,
+      "question": "XREDIT_A1_UNIQUE 的 top_k 是多少？",
       "expected": "ANSWER",
       "actual": "ANSWER",
       "passed": true,
+      "scope_passed": true,
+      "scope_leak": false,
+      "expected_scope": "A",
+      "doc_scope": "A",
       "top_chunks_ids": [
-        "p1-c01",
-        "p1-c00",
-        "p2-c00"
+        "A-p1-c00",
+        "B-p1-c00",
+        "A-p1-c01"
+      ],
+      "used_chunk_ids": [
+        "A-p1-c00",
+        "A-p1-c01"
       ]
     },
     {
-      "id": 6,
-      "question": "课程设计人员日常工作中会遇到哪些问题？",
+      "id": 107,
+      "question": "XREDIT_B1_UNIQUE 的 top_k 是多少？",
       "expected": "ANSWER",
       "actual": "ANSWER",
       "passed": true,
+      "scope_passed": true,
+      "scope_leak": false,
+      "expected_scope": "B",
+      "doc_scope": "B",
       "top_chunks_ids": [
-        "p1-c00",
-        "p1-c01",
-        "p2-c00"
+        "B-p1-c00",
+        "A-p1-c00",
+        "A-p1-c01"
+      ],
+      "used_chunk_ids": [
+        "B-p1-c00"
       ]
     },
     {
-      "id": 7,
-      "question": "RAG的边界是如何定义的？",
+      "id": 108,
+      "question": "请分别给出 A 和 B 的 top_k。",
+      "expected": "REFUSE",
+      "actual": "ANSWER",
+      "passed": false,
+      "scope_passed": true,
+      "scope_leak": false,
+      "expected_scope": "",
+      "doc_scope": "A",
+      "top_chunks_ids": [
+        "A-p1-c00",
+        "B-p1-c00",
+        "A-p1-c01"
+      ],
+      "used_chunk_ids": [
+        "A-p1-c00",
+        "A-p1-c01"
+      ]
+    },
+    {
+      "id": 109,
+      "question": "哪个 top_k 更推荐？",
+      "expected": "REFUSE",
+      "actual": "ANSWER",
+      "passed": false,
+      "scope_passed": true,
+      "scope_leak": false,
+      "expected_scope": "",
+      "doc_scope": "A",
+      "top_chunks_ids": [
+        "A-p1-c00",
+        "B-p1-c00",
+        "A-p1-c01"
+      ],
+      "used_chunk_ids": [
+        "A-p1-c00",
+        "A-p1-c01"
+      ]
+    },
+    {
+      "id": 110,
+      "question": "XREDIT_B1_UNIQUE 的用户是谁？",
       "expected": "ANSWER",
       "actual": "ANSWER",
       "passed": true,
+      "scope_passed": true,
+      "scope_leak": false,
+      "expected_scope": "B",
+      "doc_scope": "B",
       "top_chunks_ids": [
-        "p2-c01",
-        "p3-c00",
-        "p1-c00"
-      ]
-    },
-    {
-      "id": 8,
-      "question": "这个项目适合什么类型的课程？",
-      "expected": "ANSWER",
-      "actual": "ANSWER",
-      "passed": true,
-      "top_chunks_ids": [
-        "p3-c01",
-        "p1-c00",
-        "p3-c00"
-      ]
-    },
-    {
-      "id": 9,
-      "question": "数据资源有哪些特点？",
-      "expected": "ANSWER",
-      "actual": "ANSWER",
-      "passed": true,
-      "top_chunks_ids": [
-        "p2-c01",
-        "p2-c00",
-        "p1-c00"
-      ]
-    },
-    {
-      "id": 10,
-      "question": "MVP阶段重点关注什么？",
-      "expected": "ANSWER",
-      "actual": "ANSWER",
-      "passed": true,
-      "top_chunks_ids": [
-        "p3-c00",
-        "p2-c01",
-        "p3-c01"
-      ]
-    },
-    {
-      "id": 11,
-      "question": "什么是函数调用？",
-      "expected": "REFUSE",
-      "actual": "REFUSE",
-      "passed": true,
-      "top_chunks_ids": []
-    },
-    {
-      "id": 12,
-      "question": "工具调用是如何工作的？",
-      "expected": "REFUSE",
-      "actual": "REFUSE",
-      "passed": true,
-      "top_chunks_ids": []
-    },
-    {
-      "id": 13,
-      "question": "Function Calling 的原理是什么？",
-      "expected": "REFUSE",
-      "actual": "REFUSE",
-      "passed": true,
-      "top_chunks_ids": []
-    },
-    {
-      "id": 14,
-      "question": "如何使用Python实现工具调用？",
-      "expected": "REFUSE",
-      "actual": "REFUSE",
-      "passed": true,
-      "top_chunks_ids": []
-    },
-    {
-      "id": 15,
-      "question": "大模型的temperature参数如何设置？",
-      "expected": "REFUSE",
-      "actual": "REFUSE",
-      "passed": true,
-      "top_chunks_ids": [
-        "p1-c01",
-        "p2-c00",
-        "p2-c01"
-      ]
-    },
-    {
-      "id": 16,
-      "question": "什么是向量数据库？",
-      "expected": "REFUSE",
-      "actual": "REFUSE",
-      "passed": true,
-      "top_chunks_ids": []
-    },
-    {
-      "id": 17,
-      "question": "LangChain框架怎么用？",
-      "expected": "REFUSE",
-      "actual": "REFUSE",
-      "passed": true,
-      "top_chunks_ids": []
-    },
-    {
-      "id": 18,
-      "question": "RAG系统中如何使用embedding模型？",
-      "expected": "REFUSE",
-      "actual": "REFUSE",
-      "passed": true,
-      "top_chunks_ids": [
-        "p2-c00",
-        "p1-c01",
-        "p2-c01"
-      ]
-    },
-    {
-      "id": 19,
-      "question": "什么是Prompt Engineering？",
-      "expected": "REFUSE",
-      "actual": "REFUSE",
-      "passed": true,
-      "top_chunks_ids": []
-    },
-    {
-      "id": 20,
-      "question": "如何使用Transformer模型？",
-      "expected": "REFUSE",
-      "actual": "REFUSE",
-      "passed": true,
-      "top_chunks_ids": [
-        "p1-c01",
-        "p2-c00",
-        "p2-c01"
+        "B-p1-c00",
+        "A-p1-c00",
+        "A-p1-c01"
+      ],
+      "used_chunk_ids": [
+        "B-p1-c00"
       ]
     }
   ]

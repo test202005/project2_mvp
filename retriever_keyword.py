@@ -5,9 +5,10 @@ from typing import List, Tuple, Dict
 
 @dataclass
 class Chunk:
-    chunk_id: str   # e.g. "p2-c03"
+    chunk_id: str   # e.g. "A-p2-c03" (doc_id-page-index)
     page: str       # "p1" / "p2" / "p3"
     text: str
+    doc_id: str = ""  # 文档标识，如 "A", "B"
 
 def _tokenize(s: str) -> List[str]:
     s = s.lower()
@@ -31,10 +32,11 @@ def _tokenize(s: str) -> List[str]:
 
     return tokens
 
-def build_chunks(pages: Dict[str, str], max_len: int = 220, overlap: int = 40) -> List[Chunk]:
+def build_chunks(pages: Dict[str, str], max_len: int = 220, overlap: int = 40, doc_id: str = "") -> List[Chunk]:
     """
     把 p1/p2/p3 的长文本切成小块，便于检索。
     max_len/overlap 是字符级（够用，先别折腾）。
+    doc_id: 文档标识，如 "A", "B"，用于生成 {doc_id}-p{page}-c{idx} 格式的 chunk_id
     """
     chunks: List[Chunk] = []
     for page, text in pages.items():
@@ -47,7 +49,9 @@ def build_chunks(pages: Dict[str, str], max_len: int = 220, overlap: int = 40) -
             end = min(len(text), start + max_len)
             piece = text[start:end].strip()
             if piece:
-                chunks.append(Chunk(chunk_id=f"{page}-c{idx:02d}", page=page, text=piece))
+                # 生成 chunk_id：如果有 doc_id 则加前缀，否则保持原格式
+                cid = f"{doc_id}-{page}-c{idx:02d}" if doc_id else f"{page}-c{idx:02d}"
+                chunks.append(Chunk(chunk_id=cid, page=page, text=piece, doc_id=doc_id))
                 idx += 1
             start = max(0, end - overlap)
             if end >= len(text):

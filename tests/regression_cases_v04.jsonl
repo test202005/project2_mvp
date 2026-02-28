@@ -1,0 +1,10 @@
+{"id":101,"pdf_dir":"pdfs","question":"XREDIT_A1_UNIQUE 是什么？","expected":"ANSWER","expected_scope":"A"}
+{"id":102,"pdf_dir":"pdfs","question":"XREDIT_B1_UNIQUE 是什么？","expected":"ANSWER","expected_scope":"B"}
+{"id":103,"pdf_dir":"pdfs","question":"top_k 推荐是多少？","expected":"ANSWER","expected_scope":"A"}
+{"id":104,"pdf_dir":"pdfs","question":"A 版本 top_k 是多少？","expected":"ANSWER","expected_scope":"A"}
+{"id":105,"pdf_dir":"pdfs","question":"B 版本 top_k 是多少？","expected":"ANSWER","expected_scope":"B"}
+{"id":106,"pdf_dir":"pdfs","question":"XREDIT_A1_UNIQUE 的 top_k 是多少？","expected":"ANSWER","expected_scope":"A"}
+{"id":107,"pdf_dir":"pdfs","question":"XREDIT_B1_UNIQUE 的 top_k 是多少？","expected":"ANSWER","expected_scope":"B"}
+{"id":108,"pdf_dir":"pdfs","question":"请分别给出 A 和 B 的 top_k。","expected":"REFUSE"}
+{"id":109,"pdf_dir":"pdfs","question":"哪个 top_k 更推荐？","expected":"REFUSE"}
+{"id":110,"pdf_dir":"pdfs","question":"XREDIT_B1_UNIQUE 的用户是谁？","expected":"ANSWER","expected_scope":"B"}
