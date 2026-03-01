@@ -1,16 +1,16 @@
 {
-  "timestamp": "2026-03-01T00:50:46.537245",
+  "timestamp": "2026-03-01T12:25:34.157523",
   "summary": {
     "total": 10,
-    "overall_pass": 7,
-    "overall_acc": 0.7,
+    "overall_pass": 10,
+    "overall_acc": 1.0,
     "answer_total": 8,
-    "answer_pass": 7,
-    "answer_acc": 0.875,
+    "answer_pass": 8,
+    "answer_acc": 1.0,
     "refuse_total": 2,
-    "refuse_pass": 0,
-    "refuse_acc": 0.0,
-    "scope_leak_count": 1
+    "refuse_pass": 2,
+    "refuse_acc": 1.0,
+    "scope_leak_count": 0
   },
   "results": [
     {
@@ -97,19 +97,18 @@
       "question": "B 版本 top_k 是多少？",
       "expected": "ANSWER",
       "actual": "ANSWER",
-      "passed": false,
-      "scope_passed": false,
-      "scope_leak": true,
+      "passed": true,
+      "scope_passed": true,
+      "scope_leak": false,
       "expected_scope": "B",
-      "doc_scope": "A",
+      "doc_scope": "B",
       "top_chunks_ids": [
         "A-p1-c00",
         "B-p1-c00",
         "A-p1-c01"
       ],
       "used_chunk_ids": [
-        "A-p1-c00",
-        "A-p1-c01"
+        "B-p1-c00"
       ]
     },
     {
@@ -155,8 +154,8 @@
       "id": 108,
       "question": "请分别给出 A 和 B 的 top_k。",
       "expected": "REFUSE",
-      "actual": "ANSWER",
-      "passed": false,
+      "actual": "REFUSE",
+      "passed": true,
       "scope_passed": true,
       "scope_leak": false,
       "expected_scope": "",
@@ -175,8 +174,8 @@
       "id": 109,
       "question": "哪个 top_k 更推荐？",
       "expected": "REFUSE",
-      "actual": "ANSWER",
-      "passed": false,
+      "actual": "REFUSE",
+      "passed": true,
       "scope_passed": true,
       "scope_leak": false,
       "expected_scope": "",

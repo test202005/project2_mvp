@@ -97,9 +97,53 @@ def ask(pdf_dir: str, question: str) -> dict:
         elif is_howto_question(question) and not has_howto_evidence(top_chunks_text):
             print(f"[DECISION] REFUSE reason=evidence_insufficient query='{question}' top_chunks_ids={top_chunk_ids}")
             decision = "REFUSE"
+        # 跨文档对比拒答规则
         else:
-            print(f"[DECISION] ANSWER reason=sufficient_evidence query='{question}' top_chunks_ids={top_chunk_ids}")
-            decision = "ANSWER"
+            # 处理空格：替换空格后匹配
+            q_normalized = question.lower().replace(' ', '')
+
+            # 规则1：直接提问推荐/对比类问题
+            recommend_keywords = ['更推荐', '推荐哪个', '哪个更好', '哪个好']
+            is_recommend = any(kw in question for kw in recommend_keywords)
+
+            # 规则2：同时提到 A 和 B 且包含对比关键词
+            has_a_explicit = 'a版本' in q_normalized or 'a课程' in q_normalized or 'a版' in q_normalized
+            has_b_explicit = 'b版本' in q_normalized or 'b课程' in q_normalized or 'b版' in q_normalized
+
+            # 特殊模式：A 和 B / B 和 A + 对比关键词
+            has_a_and_b_pattern = ('a' in q_normalized and 'b' in q_normalized and
+                                    ('和a' in q_normalized or '和b' in q_normalized or
+                                     'a和' in q_normalized or 'b和' in q_normalized))
+            compare_keywords = ['分别', '对比', '区别', '比较']
+            has_compare = any(kw in question for kw in compare_keywords)
+
+            if is_recommend or ((has_a_explicit and has_b_explicit) or has_a_and_b_pattern) and has_compare:
+                print(f"[DECISION] REFUSE reason=cross_doc_compare_not_supported query='{question}' top_chunks_ids={top_chunk_ids}")
+                decision = "REFUSE"
+            else:
+                print(f"[DECISION] ANSWER reason=sufficient_evidence query='{question}' top_chunks_ids={top_chunk_ids}")
+                decision = "ANSWER"
+
+    # SCOPE 过滤（包含显式 doc 约束）
+    used_chunks = top
+    doc_scope = ""
+    if top and top[0][0].doc_id:
+        # 显式 doc 约束优先（复用 q_normalized）
+        # q_normalized 已在上文定义
+        forced_doc = ""
+        if 'a版本' in q_normalized or 'a课程' in q_normalized or ('a版' in q_normalized and 'b版' not in q_normalized):
+            forced_doc = "A"
+        elif 'b版本' in q_normalized or 'b课程' in q_normalized or 'b版' in q_normalized:
+            forced_doc = "B"
+
+        if forced_doc:
+            doc_scope = forced_doc
+        else:
+            doc_scope = top[0][0].doc_id
+
+        used_chunks = [(ch, score) for ch, score in top if ch.doc_id == doc_scope]
+
+    used_chunk_ids = [c.chunk_id for c, _ in used_chunks]
 
     log = log_buffer.getvalue()
     return {

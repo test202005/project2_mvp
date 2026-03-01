@@ -209,13 +209,54 @@ def run_mode_rag():
             print("抱歉，文档中未提供相关信息。")
             continue
 
+        # 跨文档对比拒答规则
+        # 处理空格：替换空格后匹配
+        q_normalized = q.lower().replace(' ', '')
+
+        # 规则1：直接提问推荐/对比类问题
+        recommend_keywords = ['更推荐', '推荐哪个', '哪个更好', '哪个好']
+        is_recommend = any(kw in q for kw in recommend_keywords)
+
+        # 规则2：同时提到 A 和 B 且包含对比关键词
+        has_a_explicit = 'a版本' in q_normalized or 'a课程' in q_normalized or 'a版' in q_normalized
+        has_b_explicit = 'b版本' in q_normalized or 'b课程' in q_normalized or 'b版' in q_normalized
+
+        # 特殊模式：A 和 B / B 和 A + 对比关键词
+        has_a_and_b_pattern = ('a' in q_normalized and 'b' in q_normalized and
+                                ('和a' in q_normalized or '和b' in q_normalized or
+                                 'a和' in q_normalized or 'b和' in q_normalized))
+        compare_keywords = ['分别', '对比', '区��', '比较']
+        has_compare = any(kw in q for kw in compare_keywords)
+
+        if is_recommend or ((has_a_explicit and has_b_explicit) or has_a_and_b_pattern) and has_compare:
+            print(f"[DECISION] REFUSE reason=cross_doc_compare_not_supported query='{q}' top_chunks_ids={top_chunk_ids}")
+            print("\n[ANSWER]")
+            print("抱歉，跨文档对比与推荐暂不支持。请指定单一文档进行提问。")
+            continue
+
+        # 显式 doc 约束优先规则（复用 q_normalized）
+        forced_doc = ""
+        if 'a版本' in q_normalized or 'a课程' in q_normalized or ('a版' in q_normalized and 'b版' not in q_normalized):
+            forced_doc = "A"
+        elif 'b版本' in q_normalized or 'b课程' in q_normalized or 'b版' in q_normalized:
+            forced_doc = "B"
+
         # SCOPE 规则：避免跨文档污染
         if top and top[0][0].doc_id:
-            dominant_doc = top[0][0].doc_id  # top1 的 doc_id
+            # 优先使用显式 doc 约束
+            if forced_doc:
+                dominant_doc = forced_doc
+            else:
+                dominant_doc = top[0][0].doc_id  # top1 的 doc_id
             before_count = len(top)
             scoped_top = [(ch, score) for ch, score in top if ch.doc_id == dominant_doc]
             after_count = len(scoped_top)
-            print(f"[DECISION] SCOPE dominant_doc={dominant_doc} filtered={before_count}->{after_count}")
+
+            if forced_doc:
+                print(f"[DECISION] SCOPE forced_doc={forced_doc} filtered={before_count}->{after_count}")
+            else:
+                print(f"[DECISION] SCOPE dominant_doc={dominant_doc} filtered={before_count}->{after_count}")
+
             top = scoped_top
             top_chunk_ids = [c.chunk_id for c, _ in top]
 
